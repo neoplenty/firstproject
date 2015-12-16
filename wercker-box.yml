@@ -1,34 +1,30 @@
-name: vagrant-virtualbox
-version: 0.0.2
+name: example
+version: 0.0.3
 type: main
 platform: ubuntu@12.04
-description: vagrant-virtualbox
+description: example
 keywords:
-  - virtualbox
-  - vagrant
-  - packer
+  - php
+  - php7
 packages:
-  - virtualbox@5.0
-  - vagrant@1.7.4
-  - packer@0.8.6
+  - php@7
 script: |
   sudo apt-get update
-  sudo apt-get install -y wget
-  sudo apt-get install -y curl
-  sudo apt-get install -y unzip
+  sudo apt-get install -y wget curl tar make gcc autoconf re2c bison libxml2-dev
+  sudo apt-get clean
 
-  echo "deb http://download.virtualbox.org/virtualbox/debian precise contrib" | sudo tee -a /etc/apt/sources.list
-  curl -sL https://www.virtualbox.org/download/oracle_vbox.asc | sudo apt-key add -
-  sudo apt-get update
-  sudo apt-get install -y virtualbox-5.0
-  vboxmanage --version
+  cd /tmp/
+  wget --content-disposition https://github.com/php/php-src/archive/master.tar.gz
+  tar xzf php-src-master.tar.gz
 
-  curl -sLO https://releases.hashicorp.com/vagrant/1.7.4/vagrant_1.7.4_x86_64.deb
-  sudo dpkg -i vagrant_1.7.4_x86_64.deb
-  rm -f vagrant_1.7.4_x86_64.deb
-  vagrant --version
+  cd php-src-master/
+  ./buildconf
+  ./configure
+  make
+  sudo make install
+  sudo cp php.ini-development /usr/local/lib/php.ini
 
-  curl -sLO https://releases.hashicorp.com/packer/0.8.6/packer_0.8.6_linux_amd64.zip
-  sudo unzip packer_0.8.6_linux_amd64.zip -d /usr/local/bin/
-  rm -f packer_0.8.6_linux_amd64.zip
-  packer version
+  cd
+  sudo rm -fr /tmp/*
+
+  php -v
