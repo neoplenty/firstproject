@@ -1,5 +1,5 @@
 name: example
-version: 0.0.3
+version: 0.0.4
 type: main
 platform: ubuntu@12.04
 description: example
@@ -10,8 +10,10 @@ packages:
   - php@7
 script: |
   sudo apt-get update
-  sudo apt-get install -y wget curl tar make gcc autoconf re2c bison libxml2-dev
+  sudo apt-get install -y wget curl tar make gcc autoconf re2c bison libxml2-dev python-pip
   sudo apt-get clean
+
+  sudo pip install awscli
 
   cd /tmp/
   wget --content-disposition https://github.com/php/php-src/archive/master.tar.gz
